@@ -7,19 +7,42 @@
 const numberButtons = document.getElementsByClassName('number');
 Array.from(numberButtons).forEach((button) => {
     button.addEventListener('click', (e) => {
-        let number = `${Number(e.target.innerText)}`;
+        let number = `${(e.target.innerText)}`;
         displayNumber(number);
     })
 });
 
 // populate the display
+const display = document.getElementById('calculator-display');
+
 function displayNumber(number) {
-    const display = document.getElementById('calculator-display');
     display.textContent += number;
 }
 
 const resetBtn = document.getElementById('AC');
 resetBtn.addEventListener('click', resetDisplay);
+
+
+// negative/positive button
+
+// percent button
+
+// decimal button
+const decimalBtn = document.getElementById('decimal');
+decimalBtn.addEventListener('click', makeDecimal);
+
+function makeDecimal(number) {
+    let string = display.textContent;
+    if (string.includes(".")) {
+        decimalBtn.disabled = true;
+    }
+    else {
+        string += '.'
+    };
+
+};
+makeDecimal();
+
 
 // reset display
 function resetDisplay() {
