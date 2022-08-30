@@ -7,13 +7,15 @@
 const numberButtons = document.getElementsByClassName('number');
 Array.from(numberButtons).forEach((button) => {
     button.addEventListener('click', (e) => {
-        let number = `${(e.target.innerText)}`;
+        let number = `${(e.target.textContent)}`;
         displayNumber(number);
     })
 });
 
+
 // populate the display
 const display = document.getElementById('calculator-display');
+
 
 function displayNumber(number) {
     display.textContent += number;
@@ -25,23 +27,39 @@ resetBtn.addEventListener('click', resetDisplay);
 
 // negative/positive button
 
+
 // percent button
+const percentBtn = document.getElementById('percent');
+percentBtn.addEventListener('click', getPercent);
+
+function getPercent(number) {
+    if (display.textContent == '' || display.textContent === 0) {
+        return;
+    }
+    else {
+       display.textContent /= 100;
+    }
+};
+getPercent();
+
 
 // decimal button
 const decimalBtn = document.getElementById('decimal');
-decimalBtn.addEventListener('click', makeDecimal);
+decimalBtn.addEventListener('click', addDecimal);
 
-function makeDecimal(number) {
-    let string = display.textContent;
-    if (string.includes(".")) {
+function addDecimal(string) {
+    if (display.textContent === '') {
+        return;
+    }
+    else if (display.textContent.includes(".")) {
         decimalBtn.disabled = true;
     }
     else {
-        string += '.'
+        display.textContent += '.'
     };
 
 };
-makeDecimal();
+addDecimal();
 
 
 // reset display
@@ -72,6 +90,7 @@ function operator(operator, num1, num2) {
     };   
 };
 operator();
+
 
 // simple math functions
 function addition(num1, num2) {
