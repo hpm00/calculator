@@ -18,10 +18,13 @@ function displayNumber(number) {
     display.textContent += number;
 }
 
+const resetBtn = document.getElementById('AC');
+resetBtn.addEventListener('click', resetDisplay);
+
 // reset display
 function resetDisplay() {
     const display = document.getElementById('calculator-display');
-    display.innerHTML = '';
+    display.innerText = '';
 };
 
 let num1 = '';
