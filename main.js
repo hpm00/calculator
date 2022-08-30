@@ -1,9 +1,28 @@
 
-// populate the display
-function display() {
 
+// keyboard 
+//const keysPressed = document.querySelector(`button[data-key="${e.keyCode}"]`);
+
+
+const numberButtons = document.getElementsByClassName('number');
+Array.from(numberButtons).forEach((button) => {
+    button.addEventListener('click', (e) => {
+        let number = `${Number(e.target.innerText)}`;
+        displayNumber(number);
+    })
+});
+
+// populate the display
+function displayNumber(number) {
+    const display = document.getElementById('calculator-display');
+    display.textContent += number;
+}
+
+// reset display
+function resetDisplay() {
+    const display = document.getElementById('calculator-display');
+    display.innerHTML = '';
 };
-display();
 
 let num1 = '';
 let num2 = '';
