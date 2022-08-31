@@ -1,9 +1,30 @@
+const display = document.getElementById('calculator-display');
 
+let value = '';
+memory = '';
+operation = 0;
 
 // keyboard 
 //const keysPressed = document.querySelector(`button[data-key="${e.keyCode}"]`);
+// translate keys 
+
+const negPosBtn = document.getElementById('negative-positive');
+negPosBtn.addEventListener('click', getNegPost);
+
+// negative/positive button
+function getNegPost(number) {
+    if (value === '' || value === 0) {
+        return;
+    }
+    else {
+        value *= -1
+    }
+    display.textContent = value;
+};
+getNegPost();
 
 
+// display numbers
 const numberButtons = document.getElementsByClassName('number');
 Array.from(numberButtons).forEach((button) => {
     button.addEventListener('click', (e) => {
@@ -14,18 +35,14 @@ Array.from(numberButtons).forEach((button) => {
 
 
 // populate the display
-const display = document.getElementById('calculator-display');
-
 
 function displayNumber(number) {
-    display.textContent += number;
+    value += number; 
+    display.textContent = value; 
 }
 
 const resetBtn = document.getElementById('AC');
 resetBtn.addEventListener('click', resetDisplay);
-
-
-// negative/positive button
 
 
 // percent button
@@ -33,12 +50,13 @@ const percentBtn = document.getElementById('percent');
 percentBtn.addEventListener('click', getPercent);
 
 function getPercent(number) {
-    if (display.textContent == '' || display.textContent === 0) {
+    if (value == '' || value === 0) {
         return;
     }
     else {
-       display.textContent /= 100;
+       value /= 100;
     }
+    display.textContent = value;
 };
 getPercent();
 
@@ -47,17 +65,17 @@ getPercent();
 const decimalBtn = document.getElementById('decimal');
 decimalBtn.addEventListener('click', addDecimal);
 
-function addDecimal(string) {
-    if (display.textContent === '') {
+function addDecimal() {
+    if (value === '') {
         return;
     }
-    else if (display.textContent.includes(".")) {
-        decimalBtn.disabled = true;
+    else if (value.indexOf(".") === -1) {
+        value += '.'
     }
     else {
-        display.textContent += '.'
+        decimalBtn.disabled = true;
     };
-
+    display.textContent = value;
 };
 addDecimal();
 
@@ -65,8 +83,18 @@ addDecimal();
 // reset display
 function resetDisplay() {
     const display = document.getElementById('calculator-display');
-    display.innerText = '';
+    value = '';
+    memory = '';
+    operation = 0;
+
+    display.textContent = value;
 };
+
+
+
+const operatorButtons = document.getElementsByClassName('operator'); 
+
+
 
 let num1 = '';
 let num2 = '';
@@ -104,7 +132,12 @@ function subtraction(num1, num2) {
 subtraction();
 
 function division(num1, num2) {
-    return num1 / num2
+    if (num2 === 0) {
+        return 'null'
+    }
+    else {
+        return num1 / num2;
+    };
 }
 division(num1, num2);
 
@@ -112,3 +145,7 @@ function multiply(num1, num2) {
     return num1 * num2
 }
 multiply();
+
+window.onload = () => {
+    resetDisplay();
+}
