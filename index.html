@@ -9,7 +9,10 @@
     <header>The Boring Calculator</header>
     <div id="main-body">
         <div id="calculator-frame">
-            <div id="calculator-display"></div>
+            <div id="calculator-display">
+                <div id="previous-screen"></div>
+                <div id="current-screen">0</div>
+            </div>
             <div id = "row-1" class = 'row'>
                 <button id="AC" class="misc">AC</button>
                 <button id="negative-positive" class="misc">+/-</button>
@@ -36,7 +39,7 @@
             </div>
             <div id = "row-5" class = 'row'>
                 <button id="zero" class = "number" data-key="48">0</button>
-                <button id = "decimal" class="number">.</button>
+                <button id = "decimal" class="decimal">.</button>
                 <button id="equal" class = "operator" data-key="187">=</button>
             </div>
         </div>
