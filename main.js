@@ -1,151 +1,126 @@
-const display = document.getElementById('calculator-display');
+// Global Variables
+let firstOperand = '';
+let secondOperand = '';
+let currentOperation = null;
 
-let value = '';
-memory = '';
-operation = 0;
-
-// keyboard 
-//const keysPressed = document.querySelector(`button[data-key="${e.keyCode}"]`);
-// translate keys 
-
-const negPosBtn = document.getElementById('negative-positive');
-negPosBtn.addEventListener('click', getNegPost);
-
-// negative/positive button
-function getNegPost(number) {
-    if (value === '' || value === 0) {
-        return;
-    }
-    else {
-        value *= -1
-    }
-    display.textContent = value;
-};
-getNegPost();
-
-
-// display numbers
+// DOM Elements
+const currentScreenOperation = document.getElementById('current-screen');
+const previousScreenOperation = document.getElementById('previous-screen');
+const AC = document.getElementById('AC');
+const plusMinus = document.getElementById('negative-positive');
+const percentButton = document.getElementById('percent');
+const operatorButtons = document.getElementsByClassName('operator');
 const numberButtons = document.getElementsByClassName('number');
+const decimalButton = document.getElementById('decimal');
+const equalButton = document.getElementById('equal');
+
 Array.from(numberButtons).forEach((button) => {
-    button.addEventListener('click', (e) => {
-        let number = `${(e.target.textContent)}`;
-        displayNumber(number);
-    })
+    button.addEventListener('click', (e) => {appendNumber(button.textContent)});
 });
 
-
-// populate the display
-
-function displayNumber(number) {
-    value += number; 
-    display.textContent = value; 
-}
-
-const resetBtn = document.getElementById('AC');
-resetBtn.addEventListener('click', resetDisplay);
-
-
-// percent button
-const percentBtn = document.getElementById('percent');
-percentBtn.addEventListener('click', getPercent);
-
-function getPercent(number) {
-    if (value == '' || value === 0) {
-        return;
-    }
-    else {
-       value /= 100;
-    }
-    display.textContent = value;
+function appendNumber(number) {
+    if (currentScreenOperation.textContent === "0") 
+    {resetScreen();}
+    currentScreenOperation.textContent += number;
 };
-getPercent();
 
+function resetScreen() {
+    currentScreenOperation.textContent = '';
+};
 
-// decimal button
-const decimalBtn = document.getElementById('decimal');
-decimalBtn.addEventListener('click', addDecimal);
+AC.addEventListener('click', clearAll);
+
+function clearAll() {
+    firstOperand = '';
+    secondOperand = '';
+    currentOperation = null;
+    currentScreenOperation.textContent = "0";
+    previousScreenOperation.textContent = '';
+};
+
+decimalButton.addEventListener('click', addDecimal);
 
 function addDecimal() {
-    if (value === '') {
-        return;
-    }
-    else if (value.indexOf(".") === -1) {
-        value += '.'
-    }
-    else {
-        decimalBtn.disabled = true;
-    };
-    display.textContent = value;
-};
-addDecimal();
-
-
-// reset display
-function resetDisplay() {
-    const display = document.getElementById('calculator-display');
-    value = '';
-    memory = '';
-    operation = 0;
-
-    display.textContent = value;
-};
-
-
-
-const operatorButtons = document.getElementsByClassName('operator'); 
-
-
-
-let num1 = '';
-let num2 = '';
-// call this function based on what the operator is
-function operator(operator, num1, num2) {
-
-    switch(operator) {
-        case '+':
-            return addition(num1, num2);
-        case '-': 
-            return subtraction(num1, num2);
-        case 'x':
-            return multiply(num1, num2);
-        case '/':
-            if (num2 === 0) {
-                return 'null'
-            }
-            else {
-                return division(num1, num2);
-            };
-    };   
-};
-operator();
-
-
-// simple math functions
-function addition(num1, num2) {
-    return num1 + num2;
-};
-addition();
-
-function subtraction(num1, num2) {
-    return num1 - num2
-};
-subtraction();
-
-function division(num1, num2) {
-    if (num2 === 0) {
-        return 'null'
-    }
-    else {
-        return num1 / num2;
-    };
+    if (currentScreenOperation === "") 
+    {currentScreenOperation.textContent === "0"}
+    else if (currentScreenOperation.textContent.includes("."))
+    {return;}
+    else {currentScreenOperation.textContent += "."}
 }
-division(num1, num2);
 
-function multiply(num1, num2) {
-    return num1 * num2
-}
-multiply();
+plusMinus.addEventListener('click', getPlusMinus);
 
-window.onload = () => {
-    resetDisplay();
-}
+function getPlusMinus() {
+    if (currentScreenOperation.textContent === "")
+    {return};
+    if (currentScreenOperation.textContent.indexOf("-") === 0)
+    {currentScreenOperation.textContent = currentScreenOperation.textContent.substring(1)} // work on this
+    if (currentScreenOperation.textContent.indexOf(".") === -1 && currentScreenOperation.textContent === "0") 
+    {currentScreenOperation.textContent = "0"}
+    else {currentScreenOperation.textContent = "-" + currentScreenOperation.textContent}
+};
+
+//percentButton.addEventListener("click", getPercent);
+
+//function getPercent() {
+
+
+
+//};
+
+Array.from(operatorButtons).forEach((button) => {
+    button.addEventListener('click', (e) => {getOperation(button.textContent)})
+});
+
+function getOperation(operator) {
+    if (currentOperation !== null) {calculate()}
+    firstOperand = currentScreenOperation.textContent;
+    currentOperation = operator;
+    //previousScreenOperation.textContent = `${firstOperand} ${currentOperation}`;
+    currentScreenOperation.textContent = '';
+};
+
+equalButton.addEventListener('click', calculate);
+
+function calculate() {
+    if (currentOperation === null) {return}
+    secondOperand = currentScreenOperation.textContent;
+    currentScreenOperation.textContent = operate(currentOperation, firstOperand, secondOperand);
+    //previousScreenOperation.textContent = `${firstOperand} ${currentOperation} ${secondOperand} =`
+    currentOperation = null;
+};
+
+function add(a, b) {
+    return a + b
+  }
+  
+  function subtract(a, b) {
+    return a - b
+  }
+  
+  function multiply(a, b) {
+    return a * b
+  }
+  
+  function divide(a, b) {
+    return a / b
+  }
+
+  function operate(operator, a, b) {
+    a = Number(a)
+    b = Number(b)
+
+  switch (operator) {
+    case '+':
+      return add(a, b)
+    case '-':
+      return subtract(a, b)
+    case 'X':
+      return multiply(a, b)
+    case '/':
+      if (b === 0) return null
+      else return divide(a, b)
+    default:
+      return null
+    }
+};
